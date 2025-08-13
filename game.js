@@ -2,14 +2,14 @@
    Config editable
 ======================= */
 const TITLE = "Adivina la película";
-const SUBTITLE = "Mas alla del tiempo y del espacio ( Pista )";
-const SECRET = ["👩‍🚀","🌓","🚀","🤖","🔭"]; // <-- cambia la respuesta (5 emojis)
+const SUBTITLE = "Puedes correr pero no puedes esconderte ( Pista )";
+const SECRET = ["🌳","🏃‍♂️","🇺🇸","🍫","🚌"]; // <-- cambia la respuesta (5 emojis)
 const PALETTE = [
-  "🌟","🌠","🔮","🔯","🌚",
-  "🌜","👩‍🚀","🙂","🚀","🌌",
-  "👻","🤖","🔭","🌙","🍸",
-  "🦄","🧙‍♀️","🌓","🧛‍♂️","💫",
-  "⭐️","🌕","🌧️","🌈","🪄"
+"🧢","🌊","🎣","🇺🇸","📮"
+"🛤","🍤","🌾","🎬","🚌"
+"📷","🍫","🎹","🐦","🚏"
+"🛶","🎖","👟","💌","🌳"
+"📺","🪑","🥾","🏃‍♂️","🗽"
 ]; // 25 (5x5). Cambia a los que quieras
 const CODE_LEN = 5;
 
