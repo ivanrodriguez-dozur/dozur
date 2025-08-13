@@ -1,102 +1,50 @@
-/* ====== Estilos generales ====== */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  margin: 0;
-  padding: 0;
-}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Adivina la película</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-/* ====== Contenedor principal ====== */
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
+  <main class="page">
+    <h1 class="title">Adivina la película</h1>
+    <p class="subtitle">Adivina la película con emojis (elige 5 emojis)</p>
 
-/* ====== Botones ====== */
-button {
-  padding: 10px 16px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-}
+    <!-- FILA DE 5 CASILLAS (selección actual) -->
+    <div id="slots" class="slots">
+      <div class="slot"></div>
+      <div class="slot"></div>
+      <div class="slot"></div>
+      <div class="slot"></div>
+      <div class="slot"></div>
+    </div>
 
-/* Botón Enviar verde */
-#btn-submit {
-  background: #16a34a;   /* verde */
-  color: #fff;
-  border-color: #149144;
-}
-#btn-submit:hover {
-  background: #15803d;   /* verde más oscuro */
-}
-#btn-submit:disabled {
-  filter: grayscale(.2);
-  opacity: .7;
-  cursor: not-allowed;
-}
+    <!-- FEEDBACK -->
+    <p id="feedback" class="feedback-text"></p>
+  </main>
 
-/* ====== Paleta de emojis 5x5 ====== */
-#emoji-palette {
-  display: grid;
-  grid-template-columns: repeat(5, 56px); /* 5 columnas */
-  gap: 10px;
-  justify-content: start;
-  margin-top: 15px;
-}
+  <!-- ===== Bottom Sheet estilo iOS ===== -->
+  <section class="sheet" id="sheet">
+    <!-- Header de la hoja -->
+    <div class="sheet__header">
+      <button id="btn-delete" class="link">
+        <span class="kbd">⌫</span> Borrar
+      </button>
+      <span class="sheet__title">Listo</span>
+    </div>
 
-.emoji-btn {
-  width: 56px;
-  height: 56px;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
+    <!-- Grid 5x? de emojis -->
+    <div id="palette" class="grid"></div>
 
-.emoji-btn:hover {
-  background: #f0f0f0;
-}
+    <!-- Barra inferior (Enviar / Ideas) -->
+    <div class="sheet__footer">
+      <button id="btn-send" class="btn btn--primary" disabled>Enviar</button>
+      <button id="btn-ideas" class="btn btn--ghost">Ideas</button>
+    </div>
+  </section>
 
-/* ====== Tablero de intentos ====== */
-#board {
-  margin-top: 20px;
-}
-
-.attempt-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.attempt-slot {
-  width: 56px;
-  height: 56px;
-  font-size: 24px;
-  background: #eee;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-right: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.feedback {
-  display: flex;
-  gap: 4px;
-  margin-left: 10px;
-}
-
-.feedback span {
-  font-size: 18px;
-}
+  <script src="game.js"></script>
+</body>
+</html>
