@@ -1,50 +1,111 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Adivina la película</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+/* =======================
+   Config editable
+======================= */
+const TITLE = "Adivina la película";
+const SUBTITLE = "Adivina la película con emojis (elige 5 emojis)";
+const SECRET = ["🌟","🌓","👻","🤖","🔭"]; // <-- cambia la respuesta (5 emojis)
+const PALETTE = [
+  "🌟","🌠","🔮","🔯","🌚",
+  "🌜","🌛","🙂","🌞","🌌",
+  "👻","🤖","🔭","🌙","🍸",
+  "🦄","🧙‍♀️","🧚","🧛‍♂️","💫",
+  "⭐️","🌕","🌧️","🌈","🪄"
+]; // 25 (5x5). Cambia a los que quieras
+const CODE_LEN = 5;
 
-  <main class="page">
-    <h1 class="title">Adivina la película</h1>
-    <p class="subtitle">Adivina la película con emojis (elige 5 emojis)</p>
+/* =======================
+   Estado
+======================= */
+let guess = [];
 
-    <!-- FILA DE 5 CASILLAS (selección actual) -->
-    <div id="slots" class="slots">
-      <div class="slot"></div>
-      <div class="slot"></div>
-      <div class="slot"></div>
-      <div class="slot"></div>
-      <div class="slot"></div>
-    </div>
+/* =======================
+   Helpers DOM
+======================= */
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
 
-    <!-- FEEDBACK -->
-    <p id="feedback" class="feedback-text"></p>
-  </main>
+function setText(sel, txt){ const el=$(sel); if(el) el.textContent = txt; }
 
-  <!-- ===== Bottom Sheet estilo iOS ===== -->
-  <section class="sheet" id="sheet">
-    <!-- Header de la hoja -->
-    <div class="sheet__header">
-      <button id="btn-delete" class="link">
-        <span class="kbd">⌫</span> Borrar
-      </button>
-      <span class="sheet__title">Listo</span>
-    </div>
+function renderSlots(){
+  const boxes = $$(".slot");
+  boxes.forEach((b,i)=>{ b.textContent = guess[i] || ""; });
+}
+function canSend(){ return guess.length === CODE_LEN; }
+function updateSendState(){ $("#btn-send").disabled = !canSend(); }
 
-    <!-- Grid 5x? de emojis -->
-    <div id="palette" class="grid"></div>
+function clearOne(){
+  guess.pop();
+  renderSlots();
+  updateSendState();
+}
 
-    <!-- Barra inferior (Enviar / Ideas) -->
-    <div class="sheet__footer">
-      <button id="btn-send" class="btn btn--primary" disabled>Enviar</button>
-      <button id="btn-ideas" class="btn btn--ghost">Ideas</button>
-    </div>
-  </section>
+function resetAll(){
+  guess = [];
+  renderSlots();
+  updateSendState();
+  $("#feedback").textContent = "";
+}
 
-  <script src="game.js"></script>
-</body>
-</html>
+function compare(a,b){
+  // Bulls & Cows básico: exactos y presentes
+  let exact=0, present=0;
+  const bb = b.slice(), aa = a.slice();
+  for(let i=0;i<CODE_LEN;i++){
+    if(aa[i]===bb[i]){ exact++; aa[i]=bb[i]=null; }
+  }
+  for(let i=0;i<CODE_LEN;i++){
+    if(!aa[i]) continue;
+    const j = bb.indexOf(aa[i]);
+    if(j!==-1){ present++; bb[j]=null; aa[i]=null; }
+  }
+  return {exact,present};
+}
+
+/* =======================
+   Render principal
+======================= */
+function renderPalette(){
+  const grid = $("#palette");
+  grid.innerHTML = "";
+  PALETTE.slice(0,25).forEach(e=>{
+    const btn = document.createElement("button");
+    btn.className = "emoji";
+    btn.textContent = e;
+    btn.addEventListener("click", ()=>{
+      if(guess.length >= CODE_LEN) return;
+      guess.push(e);
+      renderSlots();
+      updateSendState();
+    });
+    grid.appendChild(btn);
+  });
+}
+
+/* =======================
+   Enviar
+======================= */
+function onSend(){
+  if(!canSend()) return;
+  const {exact,present} = compare(guess, SECRET);
+  if(exact === CODE_LEN){
+    $("#feedback").textContent = "¡Correcto! 🎉";
+  }else{
+    $("#feedback").textContent = `✅ ${exact}  •  🟡 ${present}  •  ⚪️ ${Math.max(0, CODE_LEN-exact-present)}`;
+  }
+}
+
+/* =======================
+   Init
+======================= */
+document.addEventListener("DOMContentLoaded", ()=>{
+  setText(".title", TITLE);
+  setText(".subtitle", SUBTITLE);
+
+  renderPalette();
+  renderSlots();
+  updateSendState();
+
+  $("#btn-delete").addEventListener("click", clearOne);
+  $("#btn-send").addEventListener("click", onSend);
+  $("#btn-ideas").addEventListener("click", ()=> alert("Aquí puedes mostrar pistas o ideas 😉"));
+});
