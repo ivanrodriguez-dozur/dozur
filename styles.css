@@ -1,0 +1,333 @@
+/*
+ * Estilos globales para Emoji Code 5×5
+ *
+ * Utilizamos variables CSS para soportar temas claro y oscuro. El atributo
+ * `data-theme` se aplica en el elemento `html` o `body` para activar el modo
+ * oscuro. Todas las variables de color se resuelven a través de `var()`.
+ */
+
+/* Variables por defecto (modo claro) */
+:root {
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --surface-hover: #f1f3f8;
+  --surface-active: #e7e9f5;
+  --border: #d4d7e5;
+  --text: #0d0f24;
+  --text-muted: #6b7280;
+  --accent: #6366f1;
+  --accent-hover: #7c8cff;
+  --error: #ef4444;
+  --success: #22c55e;
+  --card-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Variables modo oscuro */
+[data-theme='dark'] {
+  --bg: #0d0f24;
+  --surface: #171b38;
+  --surface-hover: #1e2347;
+  --surface-active: #222a53;
+  --border: #283066;
+  --text: #e9eaf5;
+  --text-muted: #8c91b9;
+  --accent: #7c8cff;
+  --accent-hover: #92a1ff;
+  --error: #f87171;
+  --success: #4ade80;
+  --card-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Reset básico */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 0.375rem;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Cabecera */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.header__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.header__credits {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.pill {
+  padding: 0.3rem 0.6rem;
+  border-radius: 9999px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.875rem;
+}
+
+.btn {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background-color: var(--accent);
+  color: white;
+  border-radius: 0.5rem;
+  box-shadow: var(--card-shadow);
+}
+.btn:hover {
+  background-color: var(--accent-hover);
+}
+.btn.secondary {
+  background-color: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+.btn.secondary:hover {
+  background-color: var(--surface-hover);
+}
+
+/* Contenedor principal del juego */
+.game-container {
+  max-width: 620px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  box-shadow: var(--card-shadow);
+  padding: 1rem;
+}
+
+/* Información del puzzle */
+.puzzle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.puzzle-info__category {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+.puzzle-info__hint {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.puzzle-info__long-hint {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Tablero de emojis */
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.emoji-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  font-size: 1.8rem;
+  line-height: 1;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.emoji-button:hover {
+  background-color: var(--surface-hover);
+}
+.emoji-button.selected {
+  background-color: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.emoji-button.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Panel de selección y controles */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.controls__left, .controls__right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Mensajes de estado */
+.status-message {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+}
+.status-message.error {
+  color: var(--error);
+}
+.status-message.success {
+  color: var(--success);
+}
+
+/* Animación de sacudida para el tablero en caso de fallo */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+.shake {
+  animation: shake 0.3s ease;
+}
+
+/* Confeti overlay */
+.confetti-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background-image: url('/confetti.png');
+  background-size: cover;
+  opacity: 0;
+  animation: confetti 1.2s forwards;
+}
+@keyframes confetti {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Modal genérico */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+.modal__content {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  max-width: 320px;
+  width: 90%;
+  box-shadow: var(--card-shadow);
+  text-align: center;
+}
+.modal__content h2 {
+  margin-top: 0;
+}
+.modal__actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Toasts */
+.toast-container {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+}
+.toast {
+  background-color: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+  box-shadow: var(--card-shadow);
+  min-width: 200px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: toast-in 0.2s forwards;
+}
+@keyframes toast-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
