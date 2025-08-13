@@ -1,8 +1,8 @@
 /* =======================
    Config editable
 ======================= */
-const TITLE = "Adivina la película";
-const SUBTITLE = "Adivina la película con emojis (elige 5 emojis)";
+const TITLE = "Adivina la cancion";
+const SUBTITLE = "Adivina la cancion (elige 5 emojis)";
 const SECRET = ["🏀","👟","🌍","🔥","🎤"]; // <-- cambia la respuesta (5 emojis)
 const PALETTE = [
  "🍕","🏀","🐱","👟","🌍",
