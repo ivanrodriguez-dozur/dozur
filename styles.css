@@ -1,50 +1,102 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Adivina la película</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+/* ===== Tamaños globales (ajusta sólo estas 2 líneas si quieres más grande/pequeño) */
+:root{
+  --slot: 72px;         /* tamaño de cada casilla de la respuesta */
+  --emoji-btn: 72px;    /* tamaño de cada botón de emoji */
+  --gap: 12px;
+  --bg:#f7f7f9; --card:#ffffff; --border:#e5e7eb; --fg:#111; --muted:#6b7280;
+}
 
-  <main class="page">
-    <h1 class="title">Adivina la película</h1>
-    <p class="subtitle">Adivina la película con emojis (elige 5 emojis)</p>
+/* ===== Base ===== */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--fg); background:var(--bg);
+}
 
-    <!-- FILA DE 5 CASILLAS (selección actual) -->
-    <div id="slots" class="slots">
-      <div class="slot"></div>
-      <div class="slot"></div>
-      <div class="slot"></div>
-      <div class="slot"></div>
-      <div class="slot"></div>
-    </div>
+/* Cabecera */
+.page{max-width:680px;margin:0 auto;padding:20px 16px 140px}
+.title{font-size:40px;line-height:1.1;margin:16px 0 8px;text-align:center}
+.subtitle{margin:0 0 16px;text-align:center;color:var(--muted)}
 
-    <!-- FEEDBACK -->
-    <p id="feedback" class="feedback-text"></p>
-  </main>
+/* ===== RESPUESTA (fila horizontal de 5) ===== */
+.slots{
+  display:flex;               /* <- fuerza horizontal */
+  flex-direction: row;
+  gap: var(--gap);
+  justify-content:center;
+  align-items:center;
+  padding:14px;
+  border-radius:16px;
+  background:#fff;
+  border:1px solid var(--border);
+}
+.slot{
+  width: var(--slot);
+  height: var(--slot);
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#f8fafc;
+  display:flex;               /* centrado del emoji dentro */
+  align-items:center;
+  justify-content:center;
+  font-size: calc(var(--slot) * .55); /* tamaño del emoji en la casilla */
+  color:var(--fg);
+}
+.feedback-text{color:var(--muted);text-align:center;margin:10px 0}
 
-  <!-- ===== Bottom Sheet estilo iOS ===== -->
-  <section class="sheet" id="sheet">
-    <!-- Header de la hoja -->
-    <div class="sheet__header">
-      <button id="btn-delete" class="link">
-        <span class="kbd">⌫</span> Borrar
-      </button>
-      <span class="sheet__title">Listo</span>
-    </div>
+/* ===== Bottom sheet ===== */
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;background:#f2f3f5;
+  border-top-left-radius:24px;border-top-right-radius:24px;
+  box-shadow:0 -10px 30px rgba(0,0,0,.12);
+  padding:12px 14px calc(env(safe-area-inset-bottom,0px) + 14px);
+}
+.sheet__header{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;
+}
+.link{
+  background:transparent;border:0;color:#64748b;font-size:15px;padding:6px 4px;cursor:pointer;
+}
+.kbd{
+  display:inline-flex;min-width:20px;justify-content:center;align-items:center;
+  padding:0 6px;height:20px;border-radius:6px;border:1px solid #cbd5e1;background:#fff;margin-right:6px;font-size:12px;
+}
+.sheet__title{color:#94a3b8;font-weight:600}
 
-    <!-- Grid 5x? de emojis -->
-    <div id="palette" class="grid"></div>
+/* ===== Paleta 5×N centrada (emoji grandes) ===== */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(5, var(--emoji-btn));  /* 5 columnas fijas */
+  gap: var(--gap);
+  justify-content:center; /* centra la grilla */
+  background:#f2f3f5;border-radius:16px;padding:10px;
+}
+.emoji{
+  width: var(--emoji-btn);
+  height: var(--emoji-btn);
+  background:#fff;border:1px solid var(--border);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size: calc(var(--emoji-btn) * .52); /* tamaño del emoji del teclado */
+  cursor:pointer;transition:transform .04s ease, background .15s ease;
+}
+.emoji:active{transform:scale(.97)}
+@media (max-width:420px){
+  :root{ --slot: 64px; --emoji-btn: 64px; } /* un toque más chico en móviles mini */
+}
 
-    <!-- Barra inferior (Enviar / Ideas) -->
-    <div class="sheet__footer">
-      <button id="btn-send" class="btn btn--primary" disabled>Enviar</button>
-      <button id="btn-ideas" class="btn btn--ghost">Ideas</button>
-    </div>
-  </section>
+/* Footer hoja (Enviar/Ideas) */
+.sheet__footer{
+  display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:12px
+}
+.btn{
+  height:46px;border-radius:22px;padding:0 18px;border:1px solid #d1d5db;background:#fff;color:var(--fg);font-size:16px;cursor:pointer;
+}
+.btn--primary{
+  flex:1;background:#22c55e;border-color:#16a34a;color:#fff;font-weight:600;
+}
+.btn--primary:disabled{opacity:.5;cursor:not-allowed}
+.btn--ghost{padding:0 16px}
 
-  <script src="game.js"></script>
-</body>
-</html>
+/* Detalles */
+button{outline:none}
