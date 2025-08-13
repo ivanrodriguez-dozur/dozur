@@ -107,5 +107,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   $("#btn-delete").addEventListener("click", clearOne);
   $("#btn-send").addEventListener("click", onSend);
-  $("#btn-ideas").addEventListener("click", ()=> alert("Aquí puedes mostrar pistas o ideas 😉"));
+  $("#btn-ideas").addEventListener("click", ()=> alert("✅ Emoji correcto en la posición correcta
+  🟡 Emoji correcto pero en otra posición
+  ⚪️ Ese emoji no está en el código"
 });
