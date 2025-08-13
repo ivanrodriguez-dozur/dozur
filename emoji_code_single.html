@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Emoji Code 5×5</title>
+<style>
+  :root {
+    --bg-dark: #0d0f24;
+    --surface-dark: #17192f;
+    --text-dark: #e7e9ff;
+    --accent: #7c8cff;
+    --accent-2: #45e4c6;
+    --danger: #ff6b6b;
+    --ok: #22c55e;
+    --muted: #9aa0c3;
+    --radius: 12px;
+  }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-dark);
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  .app {
+    width: 100%;
+    max-width: 540px;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 24px;
+    margin: 0;
+  }
+  .credits {
+    background: rgba(124, 140, 255, 0.15);
+    border: 1px solid rgba(124, 140, 255, 0.35);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .btn {
+    appearance: none;
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: #0e1030;
+  }
+  .btn.secondary {
+    background: transparent;
+    color: var(--text-dark);
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .puzzle-info {
+    background: var(--surface-dark);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.3);
+    margin-bottom: 12px;
+  }
+  .puzzle-info__category {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .puzzle-info__hint {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .puzzle-info__long {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .board button {
+    font-size: 28px;
+    line-height: 1;
+    padding: 12px;
+    background: var(--surface-dark);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.15s, transform 0.1s;
+  }
+  .board button.selected {
+    background: var(--accent);
+    color: #0e1030;
+    transform: translateY(-2px);
+  }
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .status {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  .modal {
+    background: var(--surface-dark);
+    padding: 20px;
+    border-radius: var(--radius);
+    max-width: 360px;
+    width: calc(100% - 40px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+  }
+  .modal h2 {
+    margin-top: 0;
+  }
+  .modal .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface-dark);
+    color: var(--text-dark);
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 16px rgba(0,0,0,.4);
+    display: none;
+    z-index: 200;
+  }
+  .confetti-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    display: none;
+    z-index: 150;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    opacity: 0.8;
+    animation: fall 1.4s linear forwards;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-50vh) rotate(0deg); }
+    100% { transform: translateY(100vh) rotate(360deg); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Emoji Code 5×5</h1>
+    <div>
+      <span class="credits" id="credits">Créditos: 0</span>
+      <button class="btn secondary" id="adBtn">Ganar créditos</button>
+    </div>
+  </header>
+  <div class="puzzle-info">
+    <div class="puzzle-info__category" id="category"></div>
+    <div class="puzzle-info__hint" id="hintShort"></div>
+    <button class="btn secondary" id="revealHintBtn" style="display:none; margin-bottom:8px;">Revelar pista larga (-1 crédito)</button>
+    <div class="puzzle-info__long" id="hintLong" style="display:none;"></div>
+  </div>
+  <div class="board" id="board"></div>
+  <div class="controls">
+    <div class="status" id="status">Seleccionados 0/5</div>
+    <div>
+      <button class="btn secondary" id="resetBtn">Reiniciar</button>
+      <button class="btn primary" id="sendBtn">Enviar</button>
+    </div>
+  </div>
+</div>
+<!-- Toast for messages -->
+<div class="toast" id="toast"></div>
+<!-- Modal backdrop and dialog -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" id="modal">
+    <h2 id="modalTitle">Título</h2>
+    <p id="modalMessage">Mensaje</p>
+    <div class="actions" id="modalActions"></div>
+  </div>
+</div>
+<!-- Confetti overlay -->
+<div class="confetti-overlay" id="confetti"></div>
+<script>
+(function(){
+  // Configuración
+  const CREDITOS_INICIALES = 5;
+  const COSTO_POR_INTENTO = 1;
+  const RECOMPENSA_ANUNCIO = 3;
+  const COOLDOWN_ANUNCIO_MS = 60000;
+
+  const puzzles = [
+    { id:"p1", categoria:"pelicula", pistaCorta:"Dirigida por Robert Zemeckis", pistaLarga:"Un hombre amable con chocolates narra su vida desde una banca de parque", tablero25:["🍫","🏃‍♂️","🎣","🧠","🌧️","🚌","🇺🇸","🎓","🍤","📬","🧢","🪖","💌","🦐","🏈","🪟","🕰️","🧦","🚢","🌳","🪑","🏞️","👟","❤️","📜"], codigo5:["🍫","🚌","🪖","🏈","👟"], hash:"c9b3079c90e67f00d02751969cd5a5c476446ae0e27022f08d1b35c01b806b19" },
+    { id:"p2", categoria:"pelicula", pistaCorta:"Barco legendario, iceberg fatal", pistaLarga:"Una historia de amor y tragedia en un transatlántico en 1912", tablero25:["🚢","🧊","🎻","💔","💑","🛟","🌊","❄️","⚓","🎬","💎","🌃","🥀","🔥","🕊️","🫧","🎩","👒","📜","🎞️","🥂","🍷","🍽️","🧥","🧳"], codigo5:["🚢","🧊","🎻","💑","💔"], hash:"e4f5352e321846d523d8ef28904b786e56b1b0015fa3d91ab2bea317466f3bd0" },
+    { id:"p3", categoria:"cancion", pistaCorta:"Éxito de 2017 de Fonsi & Daddy Yankee", pistaLarga:"Canción latina que habla de movimientos y ritmo lento", tablero25:["🎶","🏝️","💃","🎤","🇵🇷","🌞","🌴","🍹","🕶️","🌊","🔥","🎧","🎵","🎉","🥁","❤️","💃🏾","🎼","🧢","💃🏻","🪘","🕺","👯","🍸","🎤"], codigo5:["🎶","💃","🎤","🇵🇷","❤️"], hash:"8acf67e84562c09c65f1a3e270b65c39ad7d4f796416cdd62610f06154b5a83f" },
+    { id:"p4", categoria:"cancion", pistaCorta:"Éxito de Queen", pistaLarga:"Una operática canción de 1975 con secciones múltiples; Galileo, Fandango", tablero25:["👑","🎤","🚗","👨‍🎤","🤘","🎹","🔥","🎭","⚡","🎶","🌑","🧑‍🎤","💔","🎸","🎺","🎷","🕺","📻","🕴️","🎤","🎼","🎬","🎵","🎮","🚀"], codigo5:["👑","🎤","🚗","👨‍🎤","🤘"], hash:"3bfdda301dc104e5684388b8ed7b3b84a7e27a0f7aba8a08f0e83e5ff1a8496c" },
+    { id:"p5", categoria:"cancion", pistaCorta:"Canción pop de Ed Sheeran", pistaLarga:"Ritmo pegadizo que describe conocer a alguien en un bar y enamorarse de su figura", tablero25:["👧","🧔","❤️","🕺","🎶","🍻","🏋️","💃","🥂","🏖️","🕺","🎧","🎹","🎵","🍸","🏃‍♂️","👯‍♂️","🌴","🍷","📻","🥁","👗","💃🏻","🎤","💋"], codigo5:["👧","🧔","❤️","🕺","🎶"], hash:"6b9d87a915703810dd2c8623c6ad8451811d60cac4fcde227720da256ed84c9c" },
+    { id:"p6", categoria:"jugador", pistaCorta:"GOAT argentino, camiseta 10", pistaLarga:"Múltiples Balones de Oro, ídolo del Barcelona y la selección argentina", tablero25:["🇦🇷","🐐","⚽","🔟","🕴️","👟","🏆","🧠","💙","❤️","🥇","⚽","🇫🇷","🥅","🧦","🧢","🪄","🇦🇷","🏆","🎖️","🔥","🌟","🥅","🔥","🐅"], codigo5:["🇦🇷","🐐","⚽","🔟","🕴️"], hash:"752612bf742385e8d66c670ccf11fbe265d64ec425564f1e8d8e91c4f10bad5c" },
+    { id:"p7", categoria:"jugador", pistaCorta:"Astro portugués, CR7", pistaLarga:"Delantero con potencia, salto y celebración 'Siuu', ídolo en Portugal", tablero25:["🇵🇹","🐐","⚽","7️⃣","💪","🕺","🏃‍♂️","🦵","🏋️","🏆","🇪🇸","🇮🇹","🏟️","✈️","💼","🧳","🎽","🎯","🥅","🏃‍♂️","🔥","🏋️‍♀️","🏆","🔝","👟"], codigo5:["🇵🇹","⚽","💪","7️⃣","🕺"], hash:"4a864a00f8670e7728067074468132e2735853032b4636c8c732346ce2de9352" },
+    { id:"p8", categoria:"pelicula", pistaCorta:"Viajes temporales con DeLorean", pistaLarga:"Un adolescente viaja al pasado en un auto modificado por un excéntrico científico", tablero25:["🚗","⏱️","⚡","👨‍🔬","👦","🕒","🎸","📻","🧪","🧰","🔧","🔋","🏫","🧢","🤠","🎞️","📷","🔋","🚀","📖","🎹","🕶️","🧠","⚙️","🛹"], codigo5:["🚗","⏱️","⚡","👨‍🔬","👦"], hash:"cbcf3ee2c817a08b58eadc450effb5098c2b3c31c2c71436a032a4a60477271c" },
+    { id:"p9", categoria:"pelicula", pistaCorta:"Toma la píldora roja", pistaLarga:"Neo descubre la realidad simulada y lucha contra máquinas", tablero25:["🕶️","💊","💾","🤖","🕵️","📱","💻","🔋","🌆","🐇","👓","🤺","💥","🧠","🔫","🧑‍💻","🤯","⌨️","📡","🌌","🕸️","🕴️","🕷️","🎯","🕵️‍♀️"], codigo5:["🕶️","💊","💾","🤖","🕵️"], hash:"4faf2b2f8a8962c5c43d4c00f965d3ac0b31a2f89ef6a38cec275873a93dbbfc" },
+    { id:"p10", categoria:"cancion", pistaCorta:"Clásico de Michael Jackson", pistaLarga:"Videoclip icónico con zombis y bailes nocturnos", tablero25:["🧟","🕺","🎶","🌙","💀","🧛‍♂️","🧛‍♀️","🕸️","🦇","🎤","🧠","👻","🦶","🧤","🧢","🎷","💃","🧟‍♀️","🎬","🎹","🕯️","🥁","🌑","🧦","🐺"], codigo5:["🧟","🕺","🎶","🌙","💀"], hash:"dc593e3aa82f9463b0d4e12f3ac0b214b5319d0a9d2c0b14afaaf4764604aa83" }
+  ];
+
+  // Globals
+  let currentPuzzle = null;
+  let selection = [];
+
+  // DOM elements
+  const boardEl = document.getElementById('board');
+  const categoryEl = document.getElementById('category');
+  const hintShortEl = document.getElementById('hintShort');
+  const hintLongEl = document.getElementById('hintLong');
+  const revealHintBtn = document.getElementById('revealHintBtn');
+  const creditsEl = document.getElementById('credits');
+  const adBtn = document.getElementById('adBtn');
+  const statusEl = document.getElementById('status');
+  const resetBtn = document.getElementById('resetBtn');
+  const sendBtn = document.getElementById('sendBtn');
+  const toastEl = document.getElementById('toast');
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalMessage = document.getElementById('modalMessage');
+  const modalActions = document.getElementById('modalActions');
+  const confettiOverlay = document.getElementById('confetti');
+
+  function getCredits() {
+    const n = parseInt(localStorage.getItem('ec5x5_credits'));
+    return isNaN(n) ? CREDITOS_INICIALES : n;
+  }
+  function setCredits(n) {
+    localStorage.setItem('ec5x5_credits', String(n));
+    renderCredits();
+  }
+  function getSolved() {
+    try { return JSON.parse(localStorage.getItem('ec5x5_solved')) || []; } catch(e) { return []; }
+  }
+  function setSolved(arr) {
+    localStorage.setItem('ec5x5_solved', JSON.stringify(arr));
+  }
+  function getStats() {
+    try { return JSON.parse(localStorage.getItem('ec5x5_stats')) || { played:0, won:0, streak:0 }; } catch(e) { return {played:0, won:0, streak:0}; }
+  }
+  function setStats(obj) {
+    localStorage.setItem('ec5x5_stats', JSON.stringify(obj));
+  }
+
+  function renderCredits() {
+    creditsEl.textContent = `Créditos: ${getCredits()}`;
+  }
+
+  function pickPuzzle() {
+    const solvedIds = new Set(getSolved());
+    const unsolved = puzzles.filter(p => !solvedIds.has(p.id));
+    let puzzle;
+    if (unsolved.length === 0) {
+      // reiniciar solved
+      setSolved([]);
+      puzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
+    } else {
+      puzzle = unsolved[Math.floor(Math.random() * unsolved.length)];
+    }
+    return puzzle;
+  }
+
+  function renderPuzzle(puzzle) {
+    currentPuzzle = puzzle;
+    selection = [];
+    categoryEl.textContent = puzzle.categoria;
+    hintShortEl.textContent = puzzle.pistaCorta;
+    hintLongEl.style.display = 'none';
+    revealHintBtn.style.display = 'inline-block';
+    hintLongEl.textContent = puzzle.pistaLarga;
+    statusEl.textContent = `Seleccionados 0/5`;
+    sendBtn.disabled = false;
+    // Render board
+    boardEl.innerHTML = '';
+    puzzle.tablero25.forEach((emoji, idx) => {
+      const btn = document.createElement('button');
+      btn.setAttribute('aria-label', `emoji ${idx+1}`);
+      btn.textContent = emoji;
+      btn.addEventListener('click', () => onSelect(btn, emoji));
+      boardEl.appendChild(btn);
+    });
+  }
+
+  function onSelect(btn, emoji) {
+    if (selection.length >= currentPuzzle.codigo5.length) return;
+    selection.push(emoji);
+    btn.classList.add('selected');
+    statusEl.textContent = `Seleccionados ${selection.length}/${currentPuzzle.codigo5.length}`;
+    playClick();
+    navigator.vibrate?.(60);
+  }
+
+  function resetSelection() {
+    selection = [];
+    // remove selected class
+    Array.from(boardEl.children).forEach(btn => btn.classList.remove('selected'));
+    statusEl.textContent = `Seleccionados 0/${currentPuzzle.codigo5.length}`;
+  }
+
+  async function verifyHash(codeArr, expectedHash) {
+    const str = codeArr.join('');
+    const data = new TextEncoder().encode(str);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(digest));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex === expectedHash;
+  }
+
+  async function onSubmit() {
+    const credits = getCredits();
+    if (credits < COSTO_POR_INTENTO) {
+      showModal('Sin créditos', 'No tienes créditos suficientes. ¿Quieres ver un anuncio para obtener más?', [
+        { label: 'Ver anuncio', action: handleShowAd },
+        { label: 'Cancelar', action: hideModal, className:'secondary' }
+      ]);
+      return;
+    }
+    if (selection.length < currentPuzzle.codigo5.length) {
+      showToast('Selecciona 5 emojis antes de enviar');
+      return;
+    }
+    // consume credit
+    setCredits(credits - COSTO_POR_INTENTO);
+    const isCorrect = selection.every((em, idx) => em === currentPuzzle.codigo5[idx]);
+    const stats = getStats();
+    stats.played += 1;
+    if (isCorrect) {
+      // verify hash
+      const okHash = await verifyHash(currentPuzzle.codigo5, currentPuzzle.hash);
+      if (!okHash) {
+        console.warn('Hash mismatch for puzzle', currentPuzzle.id);
+      }
+      stats.won += 1;
+      stats.streak += 1;
+      setStats(stats);
+      playSuccess();
+      navigator.vibrate?.([40,40,80]);
+      showConfetti();
+      // mark solved
+      const solved = getSolved();
+      solved.push(currentPuzzle.id);
+      setSolved(solved);
+      showModal('¡Código correcto!', 'Has descifrado el código secreto.', [
+        { label:'Siguiente puzzle', action: () => { hideModal(); renderPuzzle(pickPuzzle()); } }
+      ]);
+    } else {
+      // fail
+      stats.streak = 0;
+      setStats(stats);
+      playFail();
+      navigator.vibrate?.([40,40,80]);
+      shakeBoard();
+      showToast('Código incorrecto. ¡Inténtalo de nuevo!');
+    }
+    // reset selection anyway
+    resetSelection();
+  }
+
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.style.display = 'block';
+    setTimeout(() => {
+      toastEl.style.display = 'none';
+    }, 2000);
+  }
+
+  function showModal(title, message, actions) {
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    modalActions.innerHTML = '';
+    actions.forEach(act => {
+      const btn = document.createElement('button');
+      btn.className = 'btn' + (act.className ? ' ' + act.className : '');
+      btn.textContent = act.label;
+      btn.addEventListener('click', () => act.action());
+      modalActions.appendChild(btn);
+    });
+    modalBackdrop.style.display = 'flex';
+  }
+
+  function hideModal() {
+    modalBackdrop.style.display = 'none';
+  }
+
+  function showConfetti() {
+    confettiOverlay.innerHTML = '';
+    confettiOverlay.style.display = 'block';
+    const count = 80;
+    const colors = ['#7c8cff','#45e4c6','#ffbe0b','#ff6b6b','#8338ec'];
+    for (let i=0;i<count;i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+      piece.style.left = Math.random()*100 + '%';
+      piece.style.animationDelay = (Math.random()*0.5) + 's';
+      piece.style.opacity = Math.random()*0.9 + 0.1;
+      confettiOverlay.appendChild(piece);
+    }
+    // hide after animation
+    setTimeout(() => {
+      confettiOverlay.style.display = 'none';
+      confettiOverlay.innerHTML = '';
+    }, 1800);
+  }
+
+  function shakeBoard() {
+    boardEl.style.transition = 'transform 0.1s';
+    boardEl.style.transform = 'translateX(-5px)';
+    setTimeout(() => {
+      boardEl.style.transform = 'translateX(5px)';
+    }, 100);
+    setTimeout(() => {
+      boardEl.style.transform = 'translateX(0)';
+    }, 200);
+  }
+
+  // Audio
+  const successAudio = new Audio('success.mp3');
+  const failAudio = new Audio('fail.mp3');
+  const clickAudio = new Audio('click.mp3');
+  successAudio.preload = 'auto';
+  failAudio.preload = 'auto';
+  clickAudio.preload = 'auto';
+  function playSuccess() { try { successAudio.currentTime=0; successAudio.play(); } catch(e) {} }
+  function playFail() { try { failAudio.currentTime=0; failAudio.play(); } catch(e) {} }
+  function playClick() { try { clickAudio.currentTime=0; clickAudio.play(); } catch(e) {} }
+
+  // Ads simulation
+  function handleShowAd() {
+    const last = parseInt(localStorage.getItem('ec5x5_last_ad')||'0');
+    const now = Date.now();
+    if (now - last < COOLDOWN_ANUNCIO_MS) {
+      showToast('Debes esperar un poco antes de ver otro anuncio.');
+      return;
+    }
+    showModal('Anuncio', 'Se está reproduciendo un anuncio...', []);
+    // Simula 5 segundos de anuncio
+    setTimeout(() => {
+      hideModal();
+      const newCredits = getCredits() + RECOMPENSA_ANUNCIO;
+      setCredits(newCredits);
+      localStorage.setItem('ec5x5_last_ad', String(Date.now()));
+      showToast(`Ganaste ${RECOMPENSA_ANUNCIO} créditos`);
+    }, 5000);
+  }
+
+  // Inicializar
+  function init() {
+    // inicializa créditos si no existen
+    if (localStorage.getItem('ec5x5_credits') === null) {
+      setCredits(CREDITOS_INICIALES);
+    } else {
+      renderCredits();
+    }
+    // Render primer puzzle
+    renderPuzzle(pickPuzzle());
+    // Bind events
+    adBtn.addEventListener('click', handleShowAd);
+    revealHintBtn.addEventListener('click', () => {
+      const credits = getCredits();
+      if (credits < 1) {
+        showToast('No tienes créditos suficientes para revelar la pista');
+        return;
+      }
+      setCredits(credits - 1);
+      revealHintBtn.style.display = 'none';
+      hintLongEl.style.display = 'block';
+    });
+    resetBtn.addEventListener('click', () => resetSelection());
+    sendBtn.addEventListener('click', onSubmit);
+    // update credits on load
+    renderCredits();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
