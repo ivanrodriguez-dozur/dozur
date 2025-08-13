@@ -1,51 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Decifra el código con emojis</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Adivina la película</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1 id="game-title">Decifra el código con emojis</h1>
-    <p id="game-intro">Cargando…</p>
 
-    <div class="controls">
-      <button id="btn-backspace">Borrar</button>
-      <button id="btn-submit">Enviar</button>
-      <button id="btn-restart">Reiniciar</button>
-      <button id="btn-share">Compartir reto</button>
-      <a href="#" id="howto-link">¿Cómo jugar?</a>
+  <main class="page">
+    <h1 class="title">Adivina la película</h1>
+    <p class="subtitle">Adivina la película con emojis (elige 5 emojis)</p>
+
+    <!-- FILA DE 5 CASILLAS (selección actual) -->
+    <div id="slots" class="slots">
+      <div class="slot"></div>
+      <div class="slot"></div>
+      <div class="slot"></div>
+      <div class="slot"></div>
+      <div class="slot"></div>
     </div>
-  </header>
 
-  <main>
-    <!-- MODO TEXT (respuesta escrita) -->
-    <section id="riddle-block" style="display:none">
-      <div id="riddle-emojis" class="big-emojis">🙂</div>
-      <input id="text-answer" type="text" placeholder="Escribe tu respuesta…" class="text-input" />
-      <p id="tries-left" class="muted"></p>
-      <p id="feedback" class="muted"></p>
-    </section>
-
-    <!-- MODO EMOJI (adivinar secuencia) -->
-    <section id="game-board" aria-label="Tablero del juego"></section>
-    <section id="emoji-palette" aria-label="Panel de emojis"></section>
-
-    <p class="muted">
-      Prueba de integridad: <span id="integrity-hash">N/A</span>
-    </p>
+    <!-- FEEDBACK -->
+    <p id="feedback" class="feedback-text"></p>
   </main>
 
-  <!-- Modal ayuda -->
-  <div id="howto-modal" class="modal" style="display:none">
-    <div class="modal-content">
-      <h2>¿Cómo jugar?</h2>
-      <ul id="howto-list"></ul>
-      <button id="close-modal" type="button">Cerrar</button>
+  <!-- ===== Bottom Sheet estilo iOS ===== -->
+  <section class="sheet" id="sheet">
+    <!-- Header de la hoja -->
+    <div class="sheet__header">
+      <button id="btn-delete" class="link">
+        <span class="kbd">⌫</span> Borrar
+      </button>
+      <span class="sheet__title">Listo</span>
     </div>
-  </div>
+
+    <!-- Grid 5x? de emojis -->
+    <div id="palette" class="grid"></div>
+
+    <!-- Barra inferior (Enviar / Ideas) -->
+    <div class="sheet__footer">
+      <button id="btn-send" class="btn btn--primary" disabled>Enviar</button>
+      <button id="btn-ideas" class="btn btn--ghost">Ideas</button>
+    </div>
+  </section>
 
   <script src="game.js"></script>
 </body>
