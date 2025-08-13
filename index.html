@@ -8,8 +8,10 @@
 </head>
 <body>
   <header>
-    <h1 id="game-title">Decifra el código con emojis</h1>
-    <p id="game-intro">Cargando…</p>
+    <h1>Decifra el código con emojis</h1>
+
+    <!-- Pista / introducción -->
+    <p id="game-intro">Cargando pista…</p>
 
     <div class="controls">
       <button id="btn-backspace">Borrar</button>
@@ -21,32 +23,43 @@
   </header>
 
   <main>
-    <!-- MODO TEXT (respuesta escrita) -->
-    <section id="riddle-block" style="display:none">
-      <div id="riddle-emojis" class="big-emojis">🙂</div>
-      <input id="text-answer" type="text" placeholder="Escribe tu respuesta…" class="text-input" />
-      <p id="tries-left" class="muted"></p>
-      <p id="feedback" class="muted"></p>
+    <!-- Tablero -->
+    <section id="game-board" aria-label="Tablero del juego">
+      <!-- Se genera dinámicamente -->
     </section>
 
-    <!-- MODO EMOJI (adivinar secuencia) -->
-    <section id="game-board" aria-label="Tablero del juego"></section>
-    <section id="emoji-palette" aria-label="Panel de emojis"></section>
+    <!-- Panel de emojis -->
+    <section id="emoii-panel" aria-label="Panel de emojis">
+      <!-- Se genera dinámicamente -->
+    </section>
 
-    <p class="muted">
-      Prueba de integridad: <span id="integrity-hash">N/A</span>
+    <p class="hash-line">
+      Prueba de integridad: SHA-256(secret) = <span id="integrity-hash">calculando…</span>
     </p>
   </main>
 
-  <!-- Modal ayuda -->
+  <!-- Modal de ayuda -->
   <div id="howto-modal" class="modal" style="display:none">
     <div class="modal-content">
       <h2>¿Cómo jugar?</h2>
-      <ul id="howto-list"></ul>
+      <ul>
+        <li>Debes adivinar el código secreto de <strong>6 emojis</strong>.</li>
+        <li>Tienes <strong>10 intentos</strong> para lograrlo.</li>
+        <li>Feedback tipo “Bulls & Cows” en cada intento:<br>
+          <span>✅ Emoji correcto y en la posición correcta.</span><br>
+          <span>🟡 Emoji existe en el código pero en otra posición.</span><br>
+          <span>⚪️ Emoji no está en el código.</span>
+        </li>
+        <li>El código se genera por <strong>seed</strong> en la URL (<code>?seed=...</code>) o por la fecha del día si no hay seed.</li>
+        <li>Usa los botones para borrar, enviar, reiniciar o compartir el reto.</li>
+        <li>La prueba de integridad te muestra el hash SHA-256 del secreto.</li>
+        <li>Recarga la página y tu progreso se conserva.</li>
+      </ul>
       <button id="close-modal" type="button">Cerrar</button>
     </div>
   </div>
 
+  <!-- Script principal -->
   <script src="game.js"></script>
 </body>
 </html>
