@@ -107,5 +107,5 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   $("#btn-delete").addEventListener("click", clearOne);
   $("#btn-send").addEventListener("click", onSend);
-  $("#btn-ideas").addEventListener("click", ()=> alert("check list"));
+  $("#btn-ideas").addEventListener("click", ()=> alert("✅PERFECTA • 🟡BIEN • ⚪MAL"));
 });
