@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Decifra el código con emojis</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1 id="game-title">Decifra el código con emojis</h1>
+    <p id="game-intro">Cargando…</p>
+
+    <div class="controls">
+      <button id="btn-backspace">Borrar</button>
+      <button id="btn-submit">Enviar</button>
+      <button id="btn-restart">Reiniciar</button>
+      <button id="btn-share">Compartir reto</button>
+      <a href="#" id="howto-link">¿Cómo jugar?</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- MODO TEXT (respuesta escrita) -->
+    <section id="riddle-block" style="display:none">
+      <div id="riddle-emojis" class="big-emojis">🙂</div>
+      <input id="text-answer" type="text" placeholder="Escribe tu respuesta…" class="text-input" />
+      <p id="tries-left" class="muted"></p>
+      <p id="feedback" class="muted"></p>
+    </section>
+
+    <!-- MODO EMOJI (adivinar secuencia) -->
+    <section id="game-board" aria-label="Tablero del juego"></section>
+    <section id="emoji-palette" aria-label="Panel de emojis"></section>
+
+    <p class="muted">
+      Prueba de integridad: <span id="integrity-hash">N/A</span>
+    </p>
+  </main>
+
+  <!-- Modal ayuda -->
+  <div id="howto-modal" class="modal" style="display:none">
+    <div class="modal-content">
+      <h2>¿Cómo jugar?</h2>
+      <ul id="howto-list"></ul>
+      <button id="close-modal" type="button">Cerrar</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
