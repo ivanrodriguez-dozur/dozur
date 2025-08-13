@@ -112,19 +112,18 @@ $("#btn-delete").addEventListener("click", clearOne);
 ⚪️ = emoji no está en el código"));
 });
 
-// Modal "¿Cómo jugar?"
-document.getElementById("howto-list").innerHTML = `
-  <li>El objetivo es adivinar la <strong>secuencia secreta de 5 emojis</strong>.</li>
-  <li>Tienes <strong>${CONFIG.MAX_TRIES}</strong> intentos.</li>
-  <li>Haz clic en los emojis para formar tu intento (5 símbolos).</li>
-  <li>Pulsa <strong>Borrar</strong> para quitar el último emoji.</li>
-  <li>Pulsa <strong>Enviar</strong> para validar tu intento.</li>
-  <li>La columna de la derecha muestra el feedback:
-    <ul>
-      <li>✅ = emoji correcto en la posición correcta</li>
-      <li>🟡 = emoji correcto pero en otra posición</li>
-      <li>⚪️ = ese emoji no está en el código</li>
-    </ul>
-  </li>
-  <li>Pulsa <strong>Reiniciar</strong> para empezar de cero (misma pregunta).</li>
-`;
+/* =======================
+   Init
+======================= */
+document.addEventListener("DOMContentLoaded", ()=>{
+  setText(".title", TITLE);
+  setText(".subtitle", SUBTITLE);
+
+  renderPalette();
+  renderSlots();
+  updateSendState();
+
+  $("#btn-delete").addEventListener("click", clearOne);
+  $("#btn-send").addEventListener("click", onSend);
+  $("#btn-ideas").addEventListener("click", ()=> alert("revisa tus respuestas"));
+});
