@@ -1,7 +1,7 @@
 /* ===== Tamaños globales (ajusta sólo estas 2 líneas si quieres más grande/pequeño) */
 :root{
   --slot: 72px;         /* tamaño de cada casilla de la respuesta */
-  --emoji-btn: 72px;    /* tamaño de cada botón de emoji */
+  --emoji-btn: 50px;    /* tamaño de cada botón de emoji */
   --gap: 12px;
   --bg:#f7f7f9; --card:#ffffff; --border:#e5e7eb; --fg:#111; --muted:#6b7280;
 }
@@ -100,7 +100,3 @@ body{
 
 /* Detalles */
 button{outline:none}
-
-.emoji-grid {
-  padding-top: 5px; /* También puedes usar padding */
-}
