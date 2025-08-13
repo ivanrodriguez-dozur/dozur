@@ -10,7 +10,7 @@ const CONFIG = {
   MODE: "EMOJI",
 
   // MODO TEXT
-  ANSWER_TEXT: "Titanic",
+  ANSWER_TEXT: "BUSCANDO A NEMO",
   MAX_TRIES: 5,
 
   // MODO EMOJI (si usas MODE: "EMOJI")
