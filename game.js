@@ -4,18 +4,18 @@
 const CONFIG = {
   TITLE: "Adivina la película",
   QUESTION: "Adivina la película con emojis",
-  HINT_EMOJIS: "🙅‍♂️💃👩‍❤️‍👨🚢🥶",
+  HINT_EMOJIS: "",
 
   // Elige el modo: "TEXT" (respuesta escrita) o "EMOJI" (secuencia a 5 emojis)
   MODE: "EMOJI",
 
   // MODO TEXT
   ANSWER_TEXT: "Titanic",
-  MAX_TRIES: 6,
+  MAX_TRIES: 5,
 
   // MODO EMOJI (si usas MODE: "EMOJI")
-  SECRET_EMOJI_CODE: ["🙅‍♂️","💃","👩‍❤️‍👨","🚢","🥶"], // EXACTAMENTE 5
-  EMOJI_CHOICES: ["🙅‍♂️","💃","👩‍❤️‍👨","🚢","🥶","😀","😎","🥳","🤖","👽","🐱","🐶","🐼","🐵","🦊","🍎","🍌","🍒","🍇","🍉","⚽️","🏀","🎯","🎲","⭐️","🌙","🔥","💧","🌈","❄️","⚡️"]
+  SECRET_EMOJI_CODE: ["🔍","🐠","🌊"], // EXACTAMENTE 5
+  EMOJI_CHOICES: ["🙅‍♂️","💃","👩‍❤️‍👨","🚢","🥶","😀","😎","🥳","🤖","🔍","🐠","🌊","👽","🐱","🐶","🐼","🐵","🦊","🍎","🍌","🍒","🍇","🍉","⚽️","🏀","🎯","🎲","⭐️","🌙","🔥","💧","🌈","❄️","⚡️"]
 };
 /* Fin de lo editable */
 
