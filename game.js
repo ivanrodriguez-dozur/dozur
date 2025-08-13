@@ -1,15 +1,15 @@
 /* =======================
    Config editable
 ======================= */
-const TITLE = "Adivina la cancion";
-const SUBTITLE = "Adivina la cancion (elige 5 emojis)";
-const SECRET = ["🕺","🎵","👟","💃","💦"]; // <-- cambia la respuesta (5 emojis)
+const TITLE = "Adivina la película";
+const SUBTITLE = "Adivina la película con emojis (elige 5 emojis)";
+const SECRET = ["🌟","🌓","👻","🤖","🔭"]; // <-- cambia la respuesta (5 emojis)
 const PALETTE = [
-"🥂","🎤","🕺","👟","⚡",
-"❤️","🐾","🍾","💦","🛍️",
-"🍾","💃","💋","🎶","🌟",
-"🍀","🎼","👟","🐾","🕺",
-"🥂","💋","🔊","🎵","🎧"
+  "🌟","🌠","🔮","🔯","🌚",
+  "🌜","🌛","🙂","🌞","🌌",
+  "👻","🤖","🔭","🌙","🍸",
+  "🦄","🧙‍♀️","🌓","🧛‍♂️","💫",
+  "⭐️","🌕","🌧️","🌈","🪄"
 ]; // 25 (5x5). Cambia a los que quieras
 const CODE_LEN = 5;
 
@@ -105,25 +105,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   renderSlots();
   updateSendState();
 
-$("#btn-delete").addEventListener("click", clearOne);
-  $("#btn-send").addEventListener("click", onSend);
-  $("#btn-ideas").addEventListener("click", ()=> alert("✅ = emoji correcto en la posición correcta
-🟡 = emoji correcto pero en otra posición
-⚪️ = emoji no está en el código"));
-});
-
-/* =======================
-   Init
-======================= */
-document.addEventListener("DOMContentLoaded", ()=>{
-  setText(".title", TITLE);
-  setText(".subtitle", SUBTITLE);
-
-  renderPalette();
-  renderSlots();
-  updateSendState();
-
   $("#btn-delete").addEventListener("click", clearOne);
   $("#btn-send").addEventListener("click", onSend);
-  $("#btn-ideas").addEventListener("click", ()=> alert("revisa tus respuestas"));
+  $("#btn-ideas").addEventListener("click", ()=> alert("check list"));
 });
