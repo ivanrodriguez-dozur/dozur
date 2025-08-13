@@ -100,3 +100,10 @@ body{
 
 /* Detalles */
 button{outline:none}
+
+/* Responsivo suave: se adapta entre 56px y 72px */
+:root{
+  --slot: clamp(56px, 6.2vw, 72px);
+  --emoji-btn: clamp(56px, 6.2vw, 72px);
+  --gap: clamp(8px, 1.2vw, 14px);
+}
