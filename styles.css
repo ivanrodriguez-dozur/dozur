@@ -1,38 +1,102 @@
-:root{
-  --bg:#fafafa; --card:#fff; --border:#ddd; --fg:#222; --muted:#666;
+/* ====== Estilos generales ====== */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 
-header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:16px;z-index:5}
-h1{margin:0 0 6px 0}
-.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-button,.controls a{padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;text-decoration:none;color:inherit;cursor:pointer}
-button:hover,.controls a:hover{background:#f4f7ff}
-main{max-width:960px;margin:16px auto;padding:0 16px 40px}
-
-.big-emojis{font-size:28px;margin:12px 0}
-.text-input{width:100%;max-width:520px;padding:10px;border:1px solid var(--border);border-radius:10px;font-size:16px}
-.muted{color:var(--muted);margin-top:8px}
-
-/* Modo EMOJI */
-#game-board{
-  display:grid;grid-template-columns:repeat(6,minmax(36px,1fr));gap:8px;
-  background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:12px
+/* ====== Contenedor principal ====== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-.row{display:contents}
-.slot,.feedback{
-  display:flex;align-items:center;justify-content:center;min-height:44px;background:#fff;border:1px dashed var(--border);border-radius:8px;font-size:22px
-}
-.feedback{font-size:18px;color:var(--muted)}
-#emoji-palette{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:8px;
-  background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:12px
-}
-.emoji-btn{font-size:22px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px;cursor:pointer}
-.emoji-btn:hover{background:#f7faff}
 
-/* Modal */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px}
-.modal-content{background:#fff;border-radius:12px;max-width:720px;width:100%;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,.2)}
-.modal-content h2{margin-top:0}
+/* ====== Botones ====== */
+button {
+  padding: 10px 16px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Botón Enviar verde */
+#btn-submit {
+  background: #16a34a;   /* verde */
+  color: #fff;
+  border-color: #149144;
+}
+#btn-submit:hover {
+  background: #15803d;   /* verde más oscuro */
+}
+#btn-submit:disabled {
+  filter: grayscale(.2);
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+/* ====== Paleta de emojis 5x5 ====== */
+#emoji-palette {
+  display: grid;
+  grid-template-columns: repeat(5, 56px); /* 5 columnas */
+  gap: 10px;
+  justify-content: start;
+  margin-top: 15px;
+}
+
+.emoji-btn {
+  width: 56px;
+  height: 56px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.emoji-btn:hover {
+  background: #f0f0f0;
+}
+
+/* ====== Tablero de intentos ====== */
+#board {
+  margin-top: 20px;
+}
+
+.attempt-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.attempt-slot {
+  width: 56px;
+  height: 56px;
+  font-size: 24px;
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback {
+  display: flex;
+  gap: 4px;
+  margin-left: 10px;
+}
+
+.feedback span {
+  font-size: 18px;
+}
